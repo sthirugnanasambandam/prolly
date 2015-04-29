@@ -21,18 +21,14 @@ module Prolly
         end
 
         def count(rvs, options = {})
-          reload = options[:reload] || false
+          #reload = options[:reload] || false
           if rvs.kind_of?(Array)
-            value = @data.count { |e| rvs.all? { |rv| e.has_key?(rv) } }
+            @data.count { |e| rvs.all? { |rv| e.has_key?(rv) } }
           elsif rvs.kind_of?(Hash)
-            value = @data.count { |e|
-              rvs.map { |rkey, rval|
-                vals = rval.kind_of?(Array) ? rval : [rval]
-                vals.include?(e[rkey])
-              }.all?
+            @data.count { |e|
+              (rvs.values - e.values).empty?
             }
           end
-          return value
         end
 
         def rand_vars
